@@ -1,49 +1,49 @@
-// Dependencies imports
+/**
+ * Student.Routes
+ * @info: responsible for the entire route related to the educational
+ * institution
+ */
+
+/**  Dependencies imports * */
 import { Router } from 'express';
-import { v4 as uuid } from 'uuid';
+
+/**  Models and Repository import */
+import StudentsRepository from '../repositories/StudentsRepository';
 
 // Express structure
 const studentDataRouter = Router();
 
-// DB with no persistence
-interface Student {
-  id: string;
-  name: string;
-  itr: string;
-  birthDate: Date;
-  mobile: number;
-  gender: string;
-  paymentOpt: string;
-}
-const students: Student[] = [];
+// Instance of repositories
+const studentsRepository = new StudentsRepository();
 
 /**  Routes  * */
 // List students in DB
 studentDataRouter.get('/', (req, res) => {
+  const students = studentsRepository.all();
+
   return res.json(students);
 });
 
-// record a student in DB
+// Record a student in DB
 studentDataRouter.post('/', (req, res) => {
   const { name, itr, birthDate, mobile, gender, paymentOpt } = req.body;
 
-  const findSameName = students.find(student => student.name === name);
+  const findSameName = studentsRepository.findByName(name);
 
   if (findSameName) {
     return res
       .status(400)
       .json({ message: 'This student is already in DataBase.' });
   }
-  const student = {
-    id: uuid(),
+
+  const student = studentsRepository.create(
     name,
     itr,
     birthDate,
     mobile,
     gender,
     paymentOpt,
-  };
-  students.push(student);
+  );
 
   return res.json(student);
 });

@@ -1,5 +1,12 @@
+/**
+ * EnrollmentRepository
+ * @info: Model structure of a student record
+ */
+
+// Dependendies import
 import { v4 as uuid } from 'uuid';
 
+// Class declaration
 class Student {
   id: string;
 

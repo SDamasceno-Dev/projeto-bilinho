@@ -1,5 +1,12 @@
+/**
+ * InvoiceRepository
+ * @info: Model structure of an invoice record
+ */
+
+// Dependendies import
 import { v4 as uuid } from 'uuid';
 
+// Class declaration
 class Invoice {
   id: string;
 

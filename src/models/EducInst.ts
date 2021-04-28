@@ -3,13 +3,16 @@ import { v4 as uuid } from 'uuid';
 class EducInst {
   id: string;
 
-  eni: string;
+  name: string;
+
+  ein: string;
 
   type: string;
 
-  constructor(eni: string, type: string) {
+  constructor(name: string, ein: string, type: string) {
     this.id = uuid();
-    this.eni = eni;
+    this.name = name;
+    this.ein = ein;
     this.type = type;
   }
 }
