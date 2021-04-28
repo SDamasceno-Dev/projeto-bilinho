@@ -9,7 +9,7 @@ class EducInst {
 
   type: string;
 
-  constructor(name: string, ein: string, type: string) {
+  constructor({ name, ein, type }: Omit<EducInst, 'id'>) {
     this.id = uuid();
     this.name = name;
     this.ein = ein;

@@ -23,14 +23,14 @@ class Enrollment {
 
   idStudent: string;
 
-  constructor(
-    totalValue: number,
-    numberInvoices: number,
-    dueDayInvoices: number,
-    courseName: string,
-    idEducInst: string,
-    idStudent: string,
-  ) {
+  constructor({
+    totalValue,
+    numberInvoices,
+    dueDayInvoices,
+    courseName,
+    idEducInst,
+    idStudent,
+  }: Omit<Enrollment, 'id'>) {
     this.id = uuid();
     this.totalValue = totalValue;
     this.numberInvoices = numberInvoices;

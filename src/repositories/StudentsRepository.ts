@@ -7,6 +7,16 @@
 // Import model entinty
 import Student from '../models/Student';
 
+// Interfaces definition
+interface CreateStudentDTO {
+  name: string;
+  itr: string;
+  birthDate: Date;
+  mobile: number;
+  gender: string;
+  paymentOpt: string;
+}
+
 class StudentRepository {
   private students: Student[];
 
@@ -20,14 +30,14 @@ class StudentRepository {
   }
 
   // A method that creates a student in DB
-  public create(
-    name: string,
-    itr: string,
-    birthDate: Date,
-    mobile: number,
-    gender: string,
-    paymentOpt: string,
-  ): Student {
+  public create({
+    name,
+    itr,
+    birthDate,
+    mobile,
+    gender,
+    paymentOpt,
+  }: CreateStudentDTO): Student {
     const student = new Student(
       name,
       itr,

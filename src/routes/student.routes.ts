@@ -36,14 +36,14 @@ studentDataRouter.post('/', (req, res) => {
       .json({ message: 'This student is already in DataBase.' });
   }
 
-  const student = studentsRepository.create(
+  const student = studentsRepository.create({
     name,
     itr,
     birthDate,
     mobile,
     gender,
     paymentOpt,
-  );
+  });
 
   return res.json(student);
 });

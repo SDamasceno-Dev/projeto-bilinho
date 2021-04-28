@@ -22,14 +22,14 @@ class Student {
 
   paymentOpt: string;
 
-  constructor(
-    name: string,
-    itr: string,
-    birthDate: Date,
-    mobile: number,
-    gender: string,
-    paymentOpt: string,
-  ) {
+  constructor({
+    name,
+    itr,
+    birthDate,
+    mobile,
+    gender,
+    paymentOpt,
+  }: Omit<Student, 'id'>) {
     this.id = uuid();
     this.name = name;
     this.itr = itr;

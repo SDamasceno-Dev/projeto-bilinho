@@ -7,6 +7,21 @@
 // Import model entinty
 import EducInst from '../models/EducInst';
 
+// Interfaces definition
+interface CreateEducationalInstitutionDTO {
+  name: string;
+  ein: string;
+  type: string;
+}
+
+interface FindEducationalInstitutionByNameDTO {
+  name: string;
+}
+
+interface FindEducationalInstitutionByEinDTO {
+  ein: string;
+}
+
 class EducInstRepository {
   private educinsts: EducInst[];
 
@@ -20,8 +35,12 @@ class EducInstRepository {
   }
 
   // A method that creates an educational institutions in DB
-  public create(name: string, ein: string, type: string): EducInst {
-    const educinst = new EducInst(name, ein, type);
+  public create({
+    name,
+    ein,
+    type,
+  }: CreateEducationalInstitutionDTO): EducInst {
+    const educinst = new EducInst({ name, ein, type });
 
     this.educinsts.push(educinst);
 
@@ -29,7 +48,9 @@ class EducInstRepository {
   }
 
   // Check if there's an educational institution with same name in DB
-  public findByName(name: string): EducInst | null {
+  public findByName({
+    name,
+  }: FindEducationalInstitutionByNameDTO): EducInst | null {
     const findSameName = this.educinsts.find(
       educinst => educinst.name === name,
     );
@@ -38,7 +59,9 @@ class EducInstRepository {
   }
 
   // Check if there's an educational institution with same ein in DB
-  public findByEin(ein: string): EducInst | null {
+  public findByEin({
+    ein,
+  }: FindEducationalInstitutionByEinDTO): EducInst | null {
     const findSameEin = this.educinsts.find(educinst => educinst.ein === ein);
 
     return findSameEin || null;

@@ -18,12 +18,12 @@ class Invoice {
 
   status: string;
 
-  constructor(
-    invoiceValue: number,
-    dueDate: Date,
-    idEnrollment: string,
-    status: string,
-  ) {
+  constructor({
+    invoiceValue,
+    dueDate,
+    idEnrollment,
+    status,
+  }: Omit<Invoice, 'id'>) {
     this.id = uuid();
     this.invoiceValue = invoiceValue;
     this.dueDate = dueDate;

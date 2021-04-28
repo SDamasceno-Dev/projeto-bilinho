@@ -7,6 +7,14 @@
 // Import model entinty
 import Invoice from '../models/Invoice';
 
+// Interfaces definition
+interface CreateInvoiceDTO {
+  invoiceValue: number;
+  dueDate: Date;
+  idEnrollment: string;
+  status: string;
+}
+
 class InvoiceRepository {
   private invoices: Invoice[];
 
@@ -20,12 +28,12 @@ class InvoiceRepository {
   }
 
   // A method that creates all invoices of an enrollment in DB
-  public create(
-    invoiceValue: number,
-    dueDate: Date,
-    idEnrollment: string,
-    status: string,
-  ): Invoice {
+  public create({
+    invoiceValue,
+    dueDate,
+    idEnrollment,
+    status,
+  }: CreateInvoiceDTO): Invoice {
     const invoice = new Invoice(invoiceValue, dueDate, idEnrollment, status);
 
     this.invoices.push(invoice);

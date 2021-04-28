@@ -7,6 +7,16 @@
 // Import model entinty
 import Enrollment from '../models/Enrollment';
 
+// Interfaces definition
+interface CreateEnrollmentDTO {
+  totalValue: number;
+  numberInvoices: number;
+  dueDayInvoices: number;
+  courseName: string;
+  idEducInst: string;
+  idStudent: string;
+}
+
 class EnrollmentRepository {
   private enrollments: Enrollment[];
 
@@ -20,14 +30,14 @@ class EnrollmentRepository {
   }
 
   // A method that creates an enrollment in DB
-  public create(
-    totalValue: number,
-    numberInvoices: number,
-    dueDayInvoices: number,
-    courseName: string,
-    idEducInst: string,
-    idStudent: string,
-  ): Enrollment {
+  public create({
+    totalValue,
+    numberInvoices,
+    dueDayInvoices,
+    courseName,
+    idEducInst,
+    idStudent,
+  }: CreateEnrollmentDTO): Enrollment {
     const enrollment = new Enrollment(
       totalValue,
       numberInvoices,

@@ -66,14 +66,14 @@ enrollmentDataRouter.post('/', (req, res) => {
     return res.status(400).json({ message: 'idStudent can not be blank' });
   }
 
-  const enrollment = enrollmentsRepository.create(
+  const enrollment = enrollmentsRepository.create({
     totalValue,
     numberInvoices,
     dueDayInvoices,
     courseName,
     idEducInst,
     idStudent,
-  );
+  });
 
   return res.json(enrollment);
 });

@@ -44,7 +44,11 @@ educInstDataRouter.post('/', (req, res) => {
     });
   }
 
-  const educinst = educinstsrepository.create(name, ein, type);
+  const educinst = educinstsrepository.create({
+    name,
+    ein,
+    type,
+  });
 
   return res.json(educinst);
 });
