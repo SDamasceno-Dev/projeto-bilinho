@@ -1,51 +1,51 @@
 /**
  * Student.Routes
- * @info: responsible for the entire route related to the educational
- * institution
+ * @info: responsible for the entire route related to the Student
  */
 
-/**  Dependencies imports * */
+// Dependencies imports
 import { Router } from 'express';
+import { getCustomRepository } from 'typeorm';
 
-/**  Models and Repository import */
+// Models and Repository import
 import StudentsRepository from '../repositories/StudentsRepository';
+
+// Services import
+import CreateStudentService from '../services/CreateStudentService';
 
 // Express structure
 const studentDataRouter = Router();
 
-// Instance of repositories
-const studentsRepository = new StudentsRepository();
-
 /**  Routes  * */
+
 // List students in DB
-studentDataRouter.get('/', (req, res) => {
-  const students = studentsRepository.all();
+studentDataRouter.get('/', async (req, res) => {
+  const studentsRepository = getCustomRepository(StudentsRepository);
+  const students = await studentsRepository.find();
 
   return res.json(students);
 });
 
 // Record a student in DB
-studentDataRouter.post('/', (req, res) => {
-  const { name, itr, birthDate, mobile, gender, paymentOpt } = req.body;
+studentDataRouter.post('/', async (req, res) => {
+  try {
+    const { name, itr, birthDate, mobile, gender, paymentOpt } = req.body;
 
-  const findSameName = studentsRepository.findByName(name);
+    const createStudent = new CreateStudentService();
 
-  if (findSameName) {
-    return res
-      .status(400)
-      .json({ message: 'This student is already in DataBase.' });
+    const student = await createStudent.execute({
+      name,
+      itr,
+      birthDate,
+      mobile,
+      gender,
+      paymentOpt,
+    });
+
+    return res.json(student);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
   }
-
-  const student = studentsRepository.create({
-    name,
-    itr,
-    birthDate,
-    mobile,
-    gender,
-    paymentOpt,
-  });
-
-  return res.json(student);
 });
 
 export default studentDataRouter;

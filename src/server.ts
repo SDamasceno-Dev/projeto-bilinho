@@ -1,5 +1,15 @@
+/**
+ * Server
+ * @info: All server configuration and connectios
+ */
+
+// Dependencies imports
+import 'reflect-metadata';
 import express from 'express';
 import routes from './routes';
+
+// DB Connection
+import './database';
 
 const app = express();
 

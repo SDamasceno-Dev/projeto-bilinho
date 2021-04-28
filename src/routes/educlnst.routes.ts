@@ -4,53 +4,42 @@
  * institution
  */
 
-/**  Dependencies imports * */
+// Dependencies imports
 import { Router } from 'express';
+import { getCustomRepository } from 'typeorm';
 
-/**  Models and Repository import */
+// Models and Repository import
 import EducInstsRepository from '../repositories/EducInstRepository';
+
+// Services import
+import CreateEducInstService from '../services/CreateEducInstService';
 
 // Express structure
 const educInstDataRouter = Router();
 
-// Instance of repositories
-const educinstsrepository = new EducInstsRepository();
-
 /**  Routes  * */
 
 // List educational institutions in DB
-educInstDataRouter.get('/', (req, res) => {
-  const educinsts = educinstsrepository.all();
+educInstDataRouter.get('/', async (req, res) => {
+  const educinstsRepository = getCustomRepository(EducInstsRepository);
+  const educinsts = await educinstsRepository.find();
 
   return res.json(educinsts);
 });
 
 // Record an educational institution in DB
-educInstDataRouter.post('/', (req, res) => {
-  const { name, ein, type } = req.body;
+educInstDataRouter.post('/', async (req, res) => {
+  try {
+    const { name, ein, type } = req.body;
 
-  const findSameName = educinstsrepository.findByName(name);
-  const findSameEin = educinstsrepository.findByEin(ein);
+    const createEducInst = new CreateEducInstService();
 
-  if (findSameName) {
-    return res.status(400).json({
-      message: 'This educational institution name is already in DataBase.',
-    });
+    const educinst = await createEducInst.execute({ name, ein, type });
+
+    return res.json(educinst);
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
   }
-
-  if (findSameEin) {
-    return res.status(400).json({
-      message: 'This educational institution ein is already in DataBase.',
-    });
-  }
-
-  const educinst = educinstsrepository.create({
-    name,
-    ein,
-    type,
-  });
-
-  return res.json(educinst);
 });
 
 export default educInstDataRouter;

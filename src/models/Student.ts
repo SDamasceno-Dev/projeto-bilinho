@@ -1,43 +1,34 @@
 /**
- * EnrollmentRepository
- * @info: Model structure of a student record
+ * @file: EnrollmentRepository
+ * @info: Model structure of entity student
  */
 
 // Dependendies import
-import { v4 as uuid } from 'uuid';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 // Class declaration
+@Entity('students') // Entity of the table students
 class Student {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column('varchar')
   name: string;
 
+  @Column('varchar')
   itr: string;
 
+  @Column('timestamp with time zone')
   birthDate: Date;
 
+  @Column('bigint')
   mobile: number;
 
+  @Column('varchar')
   gender: string;
 
+  @Column('varchar')
   paymentOpt: string;
-
-  constructor({
-    name,
-    itr,
-    birthDate,
-    mobile,
-    gender,
-    paymentOpt,
-  }: Omit<Student, 'id'>) {
-    this.id = uuid();
-    this.name = name;
-    this.itr = itr;
-    this.birthDate = birthDate;
-    this.mobile = mobile;
-    this.gender = gender;
-    this.paymentOpt = paymentOpt;
-  }
 }
 
 export default Student;
