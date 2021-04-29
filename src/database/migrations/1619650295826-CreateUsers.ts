@@ -1,14 +1,15 @@
+/* eslint-disable class-methods-use-this */
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export default class CreateStudents1619634461026 implements MigrationInterface {
+export default class CreateUsers1619643609089 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'students',
+        name: 'users',
         columns: [
           {
             name: 'id',
-            type: 'varchar',
+            type: 'uuid',
             isPrimary: true,
             generationStrategy: 'uuid',
             default: 'uuid_generate_v4()',
@@ -16,32 +17,25 @@ export default class CreateStudents1619634461026 implements MigrationInterface {
           {
             name: 'name',
             type: 'varchar',
-            isNullable: false,
+          },
+          {
+            name: 'email',
+            type: 'varchar',
             isUnique: true,
           },
           {
-            name: 'itr',
+            name: 'password',
             type: 'varchar',
-            isNullable: false,
-            isUnique: true,
           },
           {
-            name: 'birthDate',
-            type: 'timestamp with time zone',
+            name: 'created_at',
+            type: 'timestamp',
+            default: 'now()',
           },
           {
-            name: 'mobile',
-            type: 'bigint',
-          },
-          {
-            name: 'gender',
-            type: 'char',
-            isNullable: false,
-          },
-          {
-            name: 'paymentOpt',
-            type: 'varchar',
-            isNullable: false,
+            name: 'updated_at',
+            type: 'timestamp',
+            default: 'now()',
           },
         ],
       }),
@@ -49,6 +43,6 @@ export default class CreateStudents1619634461026 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('students');
+    await queryRunner.dropTable('users');
   }
 }

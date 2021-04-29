@@ -1,10 +1,17 @@
+/* eslint-disable camelcase */
 /**
  * @file: EducInst
  * @info: model of entity Education Institute
  */
 
 // Dependencies imports
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('educinsts') // Entity of the table educints
 class EducInst {
@@ -19,6 +26,12 @@ class EducInst {
 
   @Column('varchar')
   type: string;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }
 
 export default EducInst;

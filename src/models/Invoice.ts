@@ -1,35 +1,49 @@
+/* eslint-disable camelcase */
 /**
- * InvoiceRepository
- * @info: Model structure of an invoice record
+ * @file: Enrollment
+ * @info: Model structure of entity enrollment
  */
 
-// Dependendies import
-import { v4 as uuid } from 'uuid';
+// Dependencies import
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+
+import Enrollment from './Enrollment';
 
 // Class declaration
+@Entity('invoices')
 class Invoice {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column('decimal')
   invoiceValue: number;
 
+  @Column('timestamp with time zone')
   dueDate: Date;
 
-  idEnrollment: string;
+  @Column('varchar')
+  enrollment_id: string;
 
+  @ManyToOne(() => Enrollment)
+  @JoinColumn({ name: 'enrollment_id' })
+  enrollment: Enrollment;
+
+  @Column('varchar')
   status: string;
 
-  constructor({
-    invoiceValue,
-    dueDate,
-    idEnrollment,
-    status,
-  }: Omit<Invoice, 'id'>) {
-    this.id = uuid();
-    this.invoiceValue = invoiceValue;
-    this.dueDate = dueDate;
-    this.idEnrollment = idEnrollment;
-    this.status = status;
-  }
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }
 
 export default Invoice;

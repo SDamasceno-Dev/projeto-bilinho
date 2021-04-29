@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export default class CreateEducInsts1619631592751
@@ -9,7 +10,7 @@ export default class CreateEducInsts1619631592751
         columns: [
           {
             name: 'id',
-            type: 'varchar',
+            type: 'uuid',
             isPrimary: true,
             generationStrategy: 'uuid',
             default: 'uuid_generate_v4()',
@@ -17,18 +18,28 @@ export default class CreateEducInsts1619631592751
           {
             name: 'name',
             type: 'varchar',
-            isNullable: false,
             isUnique: true,
           },
           {
             name: 'ein',
             type: 'varchar',
-            isNullable: false,
+            isNullable: true,
             isUnique: true,
           },
           {
             name: 'type',
             type: 'varchar',
+            isNullable: true,
+          },
+          {
+            name: 'created_at',
+            type: 'timestamp',
+            default: 'now()',
+          },
+          {
+            name: 'updated_at',
+            type: 'timestamp',
+            default: 'now()',
           },
         ],
       }),

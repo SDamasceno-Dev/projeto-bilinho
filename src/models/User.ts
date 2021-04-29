@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 /**
- * @file: Student
+ * @file: User
  * @info: Model structure of entity student
  */
 
@@ -14,8 +14,8 @@ import {
 } from 'typeorm';
 
 // Class declaration
-@Entity('students') // Entity of the table students
-class Student {
+@Entity('users') // Entity of the table students
+class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -23,19 +23,10 @@ class Student {
   name: string;
 
   @Column('varchar')
-  itr: string;
-
-  @Column('timestamp with time zone')
-  birthDate: Date;
-
-  @Column('bigint')
-  mobile: number;
+  email: string;
 
   @Column('varchar')
-  gender: string;
-
-  @Column('varchar')
-  paymentOpt: string;
+  password: string;
 
   @CreateDateColumn()
   created_at: Date;
@@ -44,4 +35,4 @@ class Student {
   updated_at: Date;
 }
 
-export default Student;
+export default User;

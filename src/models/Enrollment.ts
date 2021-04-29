@@ -1,44 +1,61 @@
+/* eslint-disable camelcase */
 /**
- * EnrollmentRepository
- * @info: Responsible for everything that will affect an enrollments's
- * manipulation data
+ * @file: Enrollment
+ * @info: Model structure of entity enrollment
  */
 
-// Dependendies import
-import { v4 as uuid } from 'uuid';
+// Dependencies import
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToOne,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+
+import Student from './Student';
+import EducInst from './EducInst';
 
 // Class declaration
+@Entity('enrollments')
 class Enrollment {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column('decimal')
   totalValue: number;
 
+  @Column('integer')
   numberInvoices: number;
 
+  @Column('integer')
   dueDayInvoices: number;
 
+  @Column('varchar')
   courseName: string;
 
-  idEducInst: string;
+  @Column('varchar')
+  educinst_id: string;
 
-  idStudent: string;
+  @ManyToOne(() => EducInst)
+  @JoinColumn({ name: 'educinst_id' })
+  educinst: EducInst;
 
-  constructor({
-    totalValue,
-    numberInvoices,
-    dueDayInvoices,
-    courseName,
-    idEducInst,
-    idStudent,
-  }: Omit<Enrollment, 'id'>) {
-    this.id = uuid();
-    this.totalValue = totalValue;
-    this.numberInvoices = numberInvoices;
-    this.dueDayInvoices = dueDayInvoices;
-    this.courseName = courseName;
-    this.idEducInst = idEducInst;
-    this.idStudent = idStudent;
-  }
+  @Column('varchar')
+  student_id: string;
+
+  @OneToOne(() => Student)
+  @JoinColumn({ name: 'student_id' })
+  student: Student;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }
 
 export default Enrollment;
