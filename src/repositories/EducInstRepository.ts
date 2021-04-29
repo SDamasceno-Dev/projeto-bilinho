@@ -1,11 +1,13 @@
 /**
- * EducInstRepository
+ * @file: EducInstRepository
  * @info: Responsible for everything that will affect a Educational
  * Institution's manipulation data
  */
 
-// Import model entinty
+// Dependencies import
 import { EntityRepository, Repository } from 'typeorm';
+
+// Import model entinty
 import EducInst from '../models/EducInst';
 
 // Interfaces definition
@@ -19,7 +21,7 @@ interface FindEducationalInstitutionByEinDTO {
 
 @EntityRepository(EducInst)
 class EducInstRepository extends Repository<EducInst> {
-  // Check if there's an educational institution with same name in DB
+  // Find an educational institution by name in DB
   public async findByName({
     name,
   }: FindEducationalInstitutionByNameDTO): Promise<EducInst | null> {
@@ -30,7 +32,7 @@ class EducInstRepository extends Repository<EducInst> {
     return findSameName || null;
   }
 
-  // Check if there's an educational institution with same ein in DB
+  // Find an educational institution by ein in DB
   public async findByEin({
     ein,
   }: FindEducationalInstitutionByEinDTO): Promise<EducInst | null> {

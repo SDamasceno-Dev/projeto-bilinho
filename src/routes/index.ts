@@ -1,14 +1,16 @@
 import { Router } from 'express';
-import educInstDataRouter from './educlnst.routes';
-import enrollmentDataRouter from './enrollment.routes';
-import studentDataRouter from './student.routes';
-import invoiceDataRouter from './invoice.routes';
+import educInstDataRouter from './educlnsts.routes';
+import enrollmentDataRouter from './enrollments.routes';
+import studentDataRouter from './students.routes';
+import invoiceDataRouter from './invoices.routes';
+import userDataRouter from './users.routes';
 
 const routes = Router();
 
-routes.use('/educinst', educInstDataRouter);
-routes.use('/enrollment', enrollmentDataRouter);
-routes.use('/student', studentDataRouter);
-routes.use('/invoice', invoiceDataRouter);
+routes.use('/educinsts', educInstDataRouter);
+routes.use('/enrollments', enrollmentDataRouter);
+routes.use('/students', studentDataRouter);
+routes.use('/invoices', invoiceDataRouter);
+routes.use('/users', userDataRouter);
 
 export default routes;

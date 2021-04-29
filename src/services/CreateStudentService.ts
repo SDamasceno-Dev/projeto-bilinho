@@ -1,13 +1,13 @@
 /* eslint-disable class-methods-use-this */
 /**
- * @Service: CreateEducInstService
- * @info: Service responsible for the creation of an educational institution
+ * @file: CreateStudentService
+ * @info: Service responsible for the creation of a Student
  */
 
 // Dependencies imports
 import { getCustomRepository } from 'typeorm';
 
-/**  Importing Models & Repositories * */
+// Importing Models & Repositories
 import Student from '../models/Student';
 import StudentRepository from '../repositories/StudentsRepository';
 
@@ -32,10 +32,18 @@ class CreateStudentService {
   }: RequestDTO): Promise<Student> {
     const studentRepository = getCustomRepository(StudentRepository);
 
+    // Checks if there are any students with the same name in the DB
     const findSameName = await studentRepository.findByName({ name });
 
     if (findSameName) {
-      throw Error('This student is already in DataBase.');
+      throw new Error('This student is already in DataBase.');
+    }
+
+    // Checks if there are any students with the same itr in the DB
+    const findSameItr = await studentRepository.findByItr({ itr });
+
+    if (findSameItr) {
+      throw new Error('This itr is used by another student.');
     }
 
     const student = studentRepository.create({

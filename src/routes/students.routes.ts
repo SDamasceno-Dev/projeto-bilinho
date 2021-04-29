@@ -1,6 +1,6 @@
 /**
- * Student.Routes
- * @info: responsible for the entire route related to the Student
+ * @file: students.routes
+ * @info: responsible for the entire route related to the student
  */
 
 // Dependencies imports

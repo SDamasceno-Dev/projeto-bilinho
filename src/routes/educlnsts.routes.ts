@@ -1,5 +1,5 @@
 /**
- * EducInst.Routes
+ * @file: educInsts.Routes
  * @info: responsible for the entire route related to the educational
  * institution
  */

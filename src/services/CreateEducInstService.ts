@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 /**
- * @Service: CreateEducInstService
+ * @file: CreateEducInstService
  * @info: Service responsible for the creation of an educational institution
  */
 
@@ -22,12 +22,15 @@ class CreateEducInstService {
   public async execute({ name, ein, type }: RequestDTO): Promise<EducInst> {
     const educinstRepository = getCustomRepository(EducInstRepository);
 
+    // Check if there's other educational institute with same name
     const findSameName = await educinstRepository.findByName({ name });
-    const findSameEin = await educinstRepository.findByEin({ ein });
 
     if (findSameName) {
       throw Error('This educational institution name is already in DataBase.');
     }
+
+    // Check if there's other educational institute with same ein
+    const findSameEin = await educinstRepository.findByEin({ ein });
 
     if (findSameEin) {
       throw Error('This educational institution ein is already in DataBase.');

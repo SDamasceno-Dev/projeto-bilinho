@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 /**
- * @file: Enrollment
- * @info: Model structure of entity enrollment
+ * @file: Invoice
+ * @info: Model structure of entity invoice
  */
 
 // Dependencies import
