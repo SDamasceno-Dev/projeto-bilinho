@@ -29,9 +29,14 @@ class CreateInvoiceService {
   }: RequestDTO): Promise<Invoice> {
     const invoiceRepository = getCustomRepository(InvoiceRepository);
 
-    const invoice = invoiceRepository.create({});
+    const invoiceValue = (enrollmentValue / numberInvoices).toFixed(2);
 
-    await invoiceRepository.save(invoice);
+    // Create all invoices
+    for (let i = 0; i < numberInvoices; i += 1) {
+      const invoice = invoiceRepository.create({ invoiceValue });
+      // eslint-disable-next-line no-await-in-loop
+      await invoiceRepository.save(invoice);
+    }
 
     return invoice;
   }
