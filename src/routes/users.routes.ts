@@ -4,13 +4,22 @@
  */
 
 // Dependencies imports
-import { Router } from 'express';
+import { request, Router } from 'express';
+import multer from 'multer';
+
+// Middlewares imports
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 // Services import
 import CreateUserService from '../services/CreateUserService';
 
+// Config imports
+import uploadConfig from '../config/upload';
+
 // Express structure
 const userDataRouter = Router();
+
+const upload = multer(uploadConfig);
 
 /**  Routes  * */
 
@@ -36,5 +45,15 @@ userDataRouter.post('/', async (req, res) => {
     return res.status(400).json({ error: err.message });
   }
 });
+
+userDataRouter.patch(
+  '/avatar',
+  ensureAuthenticated,
+  upload.single('avatar'),
+  async (req, res) => {
+    console.log(req.file);
+    return res.json({ ok: true });
+  },
+);
 
 export default userDataRouter;
