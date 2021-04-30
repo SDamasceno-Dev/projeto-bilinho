@@ -7,21 +7,24 @@
 import { Router } from 'express';
 
 // Services import
-import CreateUserService from '../services/CreateUserService';
+import AuthenticateUserService from '../services/AuthenticateUserService';
 
 // Express structure
-const userDataRouter = Router();
+const sessionDataRouter = Router();
 
 /**  Routes  * */
 
 // Record an educational institution in DB
-userDataRouter.post('/', async (req, res) => {
+sessionDataRouter.post('/', async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { email, password } = req.body;
 
-    const createUser = new CreateUserService();
+    const authenticateUser = new AuthenticateUserService();
 
-    const user = await createUser.execute({ name, email, password });
+    const { user, token } = await authenticateUser.execute({
+      email,
+      password,
+    });
 
     const userWithoutPassword = {
       id: user.id,
@@ -31,10 +34,10 @@ userDataRouter.post('/', async (req, res) => {
       updated_at: user.updated_at,
     };
 
-    return res.json(userWithoutPassword);
+    return res.json({ userWithoutPassword, token });
   } catch (err) {
     return res.status(400).json({ error: err.message });
   }
 });
 
-export default userDataRouter;
+export default sessionDataRouter;
