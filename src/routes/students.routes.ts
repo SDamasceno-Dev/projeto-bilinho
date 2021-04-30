@@ -34,24 +34,20 @@ studentDataRouter.get('/', async (req, res) => {
 
 // Record a student in DB
 studentDataRouter.post('/', async (req, res) => {
-  try {
-    const { name, itr, birthDate, mobile, gender, paymentOpt } = req.body;
+  const { name, itr, birthDate, mobile, gender, paymentOpt } = req.body;
 
-    const createStudent = new CreateStudentService();
+  const createStudent = new CreateStudentService();
 
-    const student = await createStudent.execute({
-      name,
-      itr,
-      birthDate,
-      mobile,
-      gender,
-      paymentOpt,
-    });
+  const student = await createStudent.execute({
+    name,
+    itr,
+    birthDate,
+    mobile,
+    gender,
+    paymentOpt,
+  });
 
-    return res.json(student);
-  } catch (err) {
-    return res.status(400).json({ error: err.message });
-  }
+  return res.json(student);
 });
 
 export default studentDataRouter;

@@ -35,17 +35,13 @@ educInstDataRouter.get('/', async (req, res) => {
 
 // Record an educational institution in DB
 educInstDataRouter.post('/', async (req, res) => {
-  try {
-    const { name, ein, type } = req.body;
+  const { name, ein, type } = req.body;
 
-    const createEducInst = new CreateEducInstService();
+  const createEducInst = new CreateEducInstService();
 
-    const educinst = await createEducInst.execute({ name, ein, type });
+  const educinst = await createEducInst.execute({ name, ein, type });
 
-    return res.json(educinst);
-  } catch (err) {
-    return res.status(400).json({ error: err.message });
-  }
+  return res.json(educinst);
 });
 
 export default educInstDataRouter;

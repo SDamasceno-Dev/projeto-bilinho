@@ -35,31 +35,27 @@ enrollmentDataRouter.get('/', async (req, res) => {
 
 // Record an enrollment in DB
 enrollmentDataRouter.post('/', async (req, res) => {
-  try {
-    const {
-      totalValue,
-      numberInvoices,
-      dueDayInvoices,
-      courseName,
-      educinst_id,
-      student_id,
-    } = req.body;
+  const {
+    totalValue,
+    numberInvoices,
+    dueDayInvoices,
+    courseName,
+    educinst_id,
+    student_id,
+  } = req.body;
 
-    const createEnrollment = new CreateEnrollmentService();
+  const createEnrollment = new CreateEnrollmentService();
 
-    const enrollment = await createEnrollment.execute({
-      totalValue,
-      numberInvoices,
-      dueDayInvoices,
-      courseName,
-      educinst_id,
-      student_id,
-    });
+  const enrollment = await createEnrollment.execute({
+    totalValue,
+    numberInvoices,
+    dueDayInvoices,
+    courseName,
+    educinst_id,
+    student_id,
+  });
 
-    return res.json(enrollment);
-  } catch (err) {
-    return res.status(400).json({ error: err.message });
-  }
+  return res.json(enrollment);
 });
 
 export default enrollmentDataRouter;

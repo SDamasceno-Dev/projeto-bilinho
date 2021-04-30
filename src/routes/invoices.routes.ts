@@ -35,21 +35,17 @@ invoiceDataRouter.get('/', async (req, res) => {
 
 // Record invoices in DB
 invoiceDataRouter.post('/', async (req, res) => {
-  try {
-    const { enrollmentValue, numberInvoices, dueDay, enrollment_id } = req.body;
-    const createInvoice = new CreateInvoiceService();
+  const { enrollmentValue, numberInvoices, dueDay, enrollment_id } = req.body;
+  const createInvoice = new CreateInvoiceService();
 
-    const invoice = await createInvoice.execute({
-      enrollmentValue,
-      numberInvoices,
-      dueDay,
-      enrollment_id,
-    });
+  const invoice = await createInvoice.execute({
+    enrollmentValue,
+    numberInvoices,
+    dueDay,
+    enrollment_id,
+  });
 
-    return res.json(invoice);
-  } catch (err) {
-    return res.status(400).json({ error: err.message });
-  }
+  return res.json(invoice);
 });
 
 export default invoiceDataRouter;

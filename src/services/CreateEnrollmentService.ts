@@ -8,6 +8,9 @@
 // Dependencies imports
 import { getCustomRepository } from 'typeorm';
 
+// Errors imports
+import AppError from '../errors/AppError';
+
 // Importing Models & Repositories
 import Enrollment from '../models/Enrollment';
 import EnrollmentRepository from '../repositories/EnrollmentRepository';
@@ -34,22 +37,22 @@ class CreateEnrollmentService {
 
     // Check if totalValue is > 0
     if (totalValue === null || totalValue <= 0) {
-      throw new Error('Total value must be positive.');
+      throw new AppError('Total value must be positive.');
     }
 
     // Check if number invoices >= 1
     if (numberInvoices === null || numberInvoices <= 0) {
-      throw new Error('Number invoices must be integer and postive.');
+      throw new AppError('Number invoices must be integer and postive.');
     }
 
     // Check if due day is between 1 and 31
     if (dueDayInvoices < 1 || dueDayInvoices > 31) {
-      throw new Error('Due day must be between 01 and 31');
+      throw new AppError('Due day must be between 01 and 31');
     }
 
     // Check if course name is not blank
     if (courseName.trim() === '') {
-      throw new Error('Course name must be informed');
+      throw new AppError('Course name must be informed');
     }
 
     // Verify if this student already has an enrollment in this educational institution
@@ -58,7 +61,7 @@ class CreateEnrollmentService {
     });
 
     if (findStudentEnrolled) {
-      throw new Error(
+      throw new AppError(
         'Student already enrolled in this educational institution.',
       );
     }

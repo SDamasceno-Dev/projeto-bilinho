@@ -11,6 +11,9 @@
 import { getCustomRepository } from 'typeorm';
 import { parseISO, isAfter, getYear, getMonth, add } from 'date-fns';
 
+// Errors imports
+import AppError from '../errors/AppError';
+
 // Importing Models & Repositories
 import Invoice from '../models/Invoice';
 import InvoiceRepository from '../repositories/InvoiceRepository';
@@ -45,7 +48,6 @@ class CreateInvoiceService {
 
     // Verify the date
     const dateIsAfter = isAfter(dateBase, new Date());
-    console.log('dateIsAfter', dateIsAfter);
     let dueDateTemp = dateBase;
     let dueDate;
     if (!dateIsAfter) {

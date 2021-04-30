@@ -10,6 +10,9 @@ import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import authConfig from '../config/auth';
 
+// Errors imports
+import AppError from '../errors/AppError';
+
 // Importing Models & Repositories
 import User from '../models/User';
 
@@ -31,13 +34,13 @@ class AuthenticateUserService {
     const user = await userRepository.findOne({ where: { email } });
 
     if (!user) {
-      throw new Error('Incorrect email/password combination ');
+      throw new AppError('Incorrect email/password combination.', 401);
     }
 
     const passwordMatched = await compare(password, user.password);
 
     if (!passwordMatched) {
-      throw new Error('Incorrect email/password combination ');
+      throw new AppError('Incorrect email/password combination.', 401);
     }
 
     // Md5 seed: 6a5s4d65f4as65df465asdf89a4sdfas6f48ads4f4a
