@@ -36,6 +36,19 @@
       "@typescript-eslint/no-use-before-define": [
         "error"
       ],
-      "react/react-in-jsx-scope": "off"
+      "react/react-in-jsx-scope": "off",
+      "import/extensions": [
+        "error",
+        "ignorePackages",
+        {
+          "ts": "never",
+          "tsx": "never"
+        }
+     ]
+    },
+    "settings": {
+      "import/resolver": {
+        "typescript": {}
+      }
     }
 }
