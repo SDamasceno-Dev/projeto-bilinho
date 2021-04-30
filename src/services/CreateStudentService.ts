@@ -32,18 +32,58 @@ class CreateStudentService {
   }: RequestDTO): Promise<Student> {
     const studentRepository = getCustomRepository(StudentRepository);
 
-    // Checks if there are any students with the same name in the DB
+    // Check if student name is blank
+    if (name.trim() === '') {
+      throw new Error(`Student's name can't be blank`);
+    }
+
+    // Check if there are any students with the same name in the DB
     const findSameName = await studentRepository.findByName({ name });
 
     if (findSameName) {
       throw new Error('This student is already in DataBase.');
     }
 
-    // Checks if there are any students with the same itr in the DB
+    // Check if student ITR is blank
+    if (itr.trim() === '') {
+      throw new Error(`Student's ITR can't be blank`);
+    }
+
+    // Check if student itr is only numeric
+    if (!/^\d+$/.test(itr)) {
+      throw new Error(`Student's ITR must use only numbers`);
+    }
+
+    // Check if there are any students with the same itr in the DB
     const findSameItr = await studentRepository.findByItr({ itr });
 
     if (findSameItr) {
       throw new Error('This itr is used by another student.');
+    }
+
+    // Check if student gender is blank
+    if (gender.trim() === '') {
+      throw new Error(`Student's gender can't be blank`);
+    }
+
+    // Check if student gender is M or F
+    if (!(gender.toUpperCase() === 'F' || gender.toUpperCase() === 'M')) {
+      throw new Error(`Student's gender must be M or F`);
+    }
+
+    // Check if student payment option is blank
+    if (paymentOpt.trim() === '') {
+      throw new Error(`Student's payment option can't be blank`);
+    }
+
+    // Check if student payment option is blank
+    if (
+      !(
+        paymentOpt.toUpperCase() === 'BOLETO' ||
+        paymentOpt.toUpperCase() === 'CARTÃO'
+      )
+    ) {
+      throw new Error(`Student's payment option must be "BOLETO" or  "CARTÃO"`);
     }
 
     const student = studentRepository.create({

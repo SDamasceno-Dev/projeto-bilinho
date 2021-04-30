@@ -52,6 +52,17 @@ class CreateEnrollmentService {
       throw new Error('Course name must be informed');
     }
 
+    // Verify if this student already has an enrollment in this educational institution
+    const findStudentEnrolled = await enrollmentRepository.findOne({
+      where: { educinst_id, student_id },
+    });
+
+    if (findStudentEnrolled) {
+      throw new Error(
+        'Student already enrolled in this educational institution.',
+      );
+    }
+
     const enrollment = enrollmentRepository.create({
       totalValue,
       numberInvoices,

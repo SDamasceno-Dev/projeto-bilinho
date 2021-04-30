@@ -1,3 +1,5 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable import/no-duplicates */
 /* eslint-disable camelcase */
 /* eslint-disable class-methods-use-this */
 /**
@@ -7,6 +9,7 @@
 
 // Dependencies imports
 import { getCustomRepository } from 'typeorm';
+import { parseISO, isAfter, getYear, getMonth, add } from 'date-fns';
 
 // Importing Models & Repositories
 import Invoice from '../models/Invoice';
@@ -18,7 +21,6 @@ interface RequestDTO {
   numberInvoices: number;
   dueDay: Date;
   enrollment_id: string;
-  status: string;
 }
 class CreateInvoiceService {
   public async execute({
@@ -29,12 +31,40 @@ class CreateInvoiceService {
   }: RequestDTO): Promise<Invoice> {
     const invoiceRepository = getCustomRepository(InvoiceRepository);
 
+    // Defines invoice value
     const invoiceValue = (enrollmentValue / numberInvoices).toFixed(2);
+
+    // Formating date
+    const dateBase = parseISO(
+      `${getYear(new Date())}-${
+        getMonth(new Date()) + 1 < 9
+          ? `0${getMonth(new Date()) + 1}`
+          : getMonth(new Date()) + 1
+      }-${dueDay}`,
+    );
+
+    // Verify the date
+    const dateIsAfter = isAfter(dateBase, new Date());
+    console.log('dateIsAfter', dateIsAfter);
+    let dueDateTemp = dateBase;
+    let dueDate;
+    if (!dateIsAfter) {
+      dueDateTemp = add(dateBase, { months: 1 });
+    }
+
+    // Define status
+    const status = 'ABERTA';
 
     // Create all invoices
     for (let i = 0; i < numberInvoices; i += 1) {
-      const invoice = invoiceRepository.create({ invoiceValue });
-      // eslint-disable-next-line no-await-in-loop
+      dueDate = add(dueDateTemp, { months: i });
+
+      const invoice = invoiceRepository.create({
+        invoiceValue,
+        dueDate,
+        enrollment_id,
+        status,
+      });
       await invoiceRepository.save(invoice);
     }
 

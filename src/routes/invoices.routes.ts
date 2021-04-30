@@ -19,9 +19,9 @@ const invoiceDataRouter = Router();
 
 /**  Routes  * */
 // List invoices in DB
-invoiceDataRouter.get('/', (req, res) => {
+invoiceDataRouter.get('/', async (req, res) => {
   const invoicesRepository = getCustomRepository(InvoiceRepository);
-  const invoices = invoicesRepository.find();
+  const invoices = await invoicesRepository.find();
 
   return res.json(invoices);
 });
