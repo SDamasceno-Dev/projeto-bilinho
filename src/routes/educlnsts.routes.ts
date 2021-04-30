@@ -8,6 +8,9 @@
 import { Router } from 'express';
 import { getCustomRepository } from 'typeorm';
 
+// Middlewares imports
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+
 // Models and Repository import
 import EducInstsRepository from '../repositories/EducInstRepository';
 
@@ -18,6 +21,9 @@ import CreateEducInstService from '../services/CreateEducInstService';
 const educInstDataRouter = Router();
 
 /**  Routes  * */
+
+// Middlewares usage
+educInstDataRouter.use(ensureAuthenticated);
 
 // List educational institutions in DB
 educInstDataRouter.get('/', async (req, res) => {

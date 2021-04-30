@@ -8,6 +8,9 @@
 import { Router } from 'express';
 import { getCustomRepository } from 'typeorm';
 
+// Middlewares imports
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+
 // Models and Repository import
 import InvoiceRepository from '../repositories/InvoiceRepository';
 
@@ -18,6 +21,10 @@ import CreateInvoiceService from '../services/CreateInvoiceService';
 const invoiceDataRouter = Router();
 
 /**  Routes  * */
+
+// Middlewares usage
+invoiceDataRouter.use(ensureAuthenticated);
+
 // List invoices in DB
 invoiceDataRouter.get('/', async (req, res) => {
   const invoicesRepository = getCustomRepository(InvoiceRepository);

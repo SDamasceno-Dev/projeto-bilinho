@@ -8,6 +8,9 @@
 import { Router } from 'express';
 import { getCustomRepository } from 'typeorm';
 
+// Middlewares imports
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+
 // Models and Repository import
 import EnrollmentRepository from '../repositories/EnrollmentRepository';
 
@@ -18,6 +21,9 @@ import CreateEnrollmentService from '../services/CreateEnrollmentService';
 const enrollmentDataRouter = Router();
 
 /**  Routes  * */
+
+// Middlewares usage
+enrollmentDataRouter.use(ensureAuthenticated);
 
 // List all enrollments in DB
 enrollmentDataRouter.get('/', async (req, res) => {

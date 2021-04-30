@@ -8,6 +8,7 @@
 import { getRepository } from 'typeorm';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
+import authConfig from '../config/auth';
 
 // Importing Models & Repositories
 import User from '../models/User';
@@ -41,9 +42,10 @@ class AuthenticateUserService {
 
     // Md5 seed: 6a5s4d65f4as65df465asdf89a4sdfas6f48ads4f4a
     // Md5 hash: 0d3ec17be0a1e2eee0e7b4afdd205ca3
-    const token = sign({}, '0d3ec17be0a1e2eee0e7b4afdd205ca3', {
+    const { secret, expiresIn } = authConfig.jwt;
+    const token = sign({}, secret, {
       subject: user.id,
-      expiresIn: '1d',
+      expiresIn,
     });
     return { user, token };
   }

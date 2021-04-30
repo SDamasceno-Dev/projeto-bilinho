@@ -7,6 +7,9 @@
 import { Router } from 'express';
 import { getCustomRepository } from 'typeorm';
 
+// Middlewares imports
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+
 // Models and Repository import
 import StudentsRepository from '../repositories/StudentsRepository';
 
@@ -17,6 +20,9 @@ import CreateStudentService from '../services/CreateStudentService';
 const studentDataRouter = Router();
 
 /**  Routes  * */
+
+// Middlewares usage
+studentDataRouter.use(ensureAuthenticated);
 
 // List students in DB
 studentDataRouter.get('/', async (req, res) => {
