@@ -4,7 +4,7 @@
  */
 
 // Dependencies imports
-import { request, Router } from 'express';
+import { Router } from 'express';
 import multer from 'multer';
 
 // Middlewares imports
@@ -12,6 +12,7 @@ import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 // Services import
 import CreateUserService from '../services/CreateUserService';
+import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
 
 // Config imports
 import uploadConfig from '../config/upload';
@@ -51,8 +52,26 @@ userDataRouter.patch(
   ensureAuthenticated,
   upload.single('avatar'),
   async (req, res) => {
-    console.log(req.file);
-    return res.json({ ok: true });
+    try {
+      const updateUserAvatar = new UpdateUserAvatarService();
+
+      const user = await updateUserAvatar.execute({
+        user_id: req.user.id,
+        avatarFilename: req.file.filename,
+      });
+
+      const userWithoutPassword = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        created_at: user.created_at,
+        updated_at: user.updated_at,
+      };
+
+      return res.json(userWithoutPassword);
+    } catch (err) {
+      return res.status(400).json({ error: err.message });
+    }
   },
 );
 

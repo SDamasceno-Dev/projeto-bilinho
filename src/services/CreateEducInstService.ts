@@ -7,7 +7,7 @@
 // Dependencies imports
 import { getCustomRepository } from 'typeorm';
 
-/**  Importing Models & Repositories * */
+// Importing Models & Repositories
 import EducInst from '../models/EducInst';
 import EducInstRepository from '../repositories/EducInstRepository';
 
