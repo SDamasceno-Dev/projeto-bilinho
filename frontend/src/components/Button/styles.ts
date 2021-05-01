@@ -13,6 +13,10 @@ export const Container = styled.button`
   font-weight: 700;
   transition: background-color 0.3s;
 
+  & + button {
+    margin-left: 5px;
+  }
+
   &:hover {
     background: ${shade(0.2, '#5f4693')};
   }
