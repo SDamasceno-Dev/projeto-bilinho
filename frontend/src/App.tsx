@@ -7,15 +7,15 @@
 import React from 'react';
 
 // Some import
-// import SignIn from './pages/SignIn';
-import SignUp from './pages/SignUp';
+import SignIn from './pages/SignIn';
+// import SignUp from './pages/SignUp';
 
 // Styles import
 import GlobalStyle from './styles/global';
 
 const App: React.FC = () => (
   <>
-    <SignUp />
+    <SignIn />
     <GlobalStyle />
   </>
 );

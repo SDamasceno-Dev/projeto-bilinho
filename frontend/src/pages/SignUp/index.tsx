@@ -1,6 +1,6 @@
 /**
- * @file: SignIn
- * @info: Main Component of App
+ * @file: SignUp
+ * @info: Component of register an user
  */
 
 // Dependencies import
@@ -17,8 +17,38 @@ import { Container, Content } from './styles';
 
 const SignUp: React.FC = () => {
   const { register, handleSubmit } = useForm();
-  const onSubmit = (data: Record<string, unknown>) => {
-    console.log('form data', data);
+
+  // Function definitions
+  const onSubmit = (data: Record<string, ''>) => {
+    console.log(data);
+    // Validation Form
+    if (data.name === undefined || data.name.trim() === '') {
+      alert('Nome é obrigatório.');
+      return;
+    }
+
+    if (data.email === undefined || data.email.trim() === '') {
+      alert('Campo e-mail é obrigatório.');
+      return;
+    }
+
+    if (
+      !data.email.match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      )
+    ) {
+      alert('Por favor utilize um e-mail válido.');
+      return;
+    }
+
+    if (data.password === undefined || data.password.trim() === '') {
+      alert('Campo senha é obrigatório.');
+      return;
+    }
+
+    if (data.password.length < 6) {
+      alert('Campo senha deve ter no mínimo 6 dígitos.');
+    }
   };
   return (
     <Container>

@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 // Inteface definition
 interface ContainerProps {
@@ -18,13 +18,6 @@ export const Container = styled.div<ContainerProps>`
   & + div {
     margin-top: 8px;
   }
-
-  ${props =>
-    props.isFocused &&
-    css`
-      color: #5f4693;
-      border-color: #5f4693;
-    `}
 
   input {
     flex: 1;
