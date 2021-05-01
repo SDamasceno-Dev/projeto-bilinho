@@ -25,7 +25,7 @@ sessionDataRouter.post('/', async (req, res) => {
     password,
   });
 
-  const userWithoutPassword = {
+  const userData = {
     id: user.id,
     name: user.name,
     email: user.email,
@@ -33,7 +33,7 @@ sessionDataRouter.post('/', async (req, res) => {
     updated_at: user.updated_at,
   };
 
-  return res.json({ userWithoutPassword, token });
+  return res.json({ userData, token });
 });
 
 export default sessionDataRouter;

@@ -32,7 +32,7 @@ userDataRouter.post('/', async (req, res) => {
 
   const user = await createUser.execute({ name, email, password });
 
-  const userWithoutPassword = {
+  const userData = {
     id: user.id,
     name: user.name,
     email: user.email,
@@ -40,7 +40,7 @@ userDataRouter.post('/', async (req, res) => {
     updated_at: user.updated_at,
   };
 
-  return res.json(userWithoutPassword);
+  return res.json(userData);
 });
 
 userDataRouter.patch(
@@ -55,7 +55,7 @@ userDataRouter.patch(
       avatarFilename: req.file.filename,
     });
 
-    const userWithoutPassword = {
+    const userData = {
       id: user.id,
       name: user.name,
       email: user.email,
@@ -63,7 +63,7 @@ userDataRouter.patch(
       updated_at: user.updated_at,
     };
 
-    return res.json(userWithoutPassword);
+    return res.json(userData);
   },
 );
 
