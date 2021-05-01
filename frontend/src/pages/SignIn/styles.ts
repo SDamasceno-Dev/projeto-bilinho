@@ -30,40 +30,6 @@ export const Content = styled.div`
     flex-direction: column;
     width: 23.9%;
     align-items: center;
-
-    input {
-      border-radius: 4px;
-      border: 1px solid #999999;
-      width: 100%;
-      padding: 5px;
-      color: #626262;
-      font-weight: 600;
-      font-size: 12px;
-
-      &::placeholder {
-        color: #ccc;
-      }
-
-      & + input {
-        margin-top: 8px;
-      }
-    }
-
-    button {
-      width: 40.5%;
-      height: 30px;
-      margin-top: 10px;
-      border-radius: 4px;
-      background: #5f4693;
-      border: 0;
-      color: #fff;
-      font-weight: 700;
-      transition: background-color 0.3s;
-
-      &:hover {
-        background: ${shade(0.2, '#5f4693')};
-      }
-    }
   }
 
   a {
