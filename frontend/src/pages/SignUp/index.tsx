@@ -6,6 +6,8 @@
 // Dependencies import
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
 // Components import
 import { FiUser, FiMail, FiLock } from 'react-icons/fi';
@@ -15,40 +17,29 @@ import Button from '../../components/Button';
 // Styles import
 import { Container, Content } from './styles';
 
+// Validation schema
+const schema = Yup.object().shape({
+  name: Yup.string().required('Nome obrigatório.'),
+  email: Yup.string()
+    .required('E-mail obrigatório.')
+    .email('Digite um e-mail válido'),
+  password: Yup.string()
+    .required('Senha obrigatória.')
+    .min(6, 'No mínimo 6 dígitos'),
+});
+
 const SignUp: React.FC = () => {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
   // Function definitions
   const onSubmit = (data: Record<string, ''>) => {
     console.log(data);
-    // Validation Form
-    if (data.name === undefined || data.name.trim() === '') {
-      alert('Nome é obrigatório.');
-      return;
-    }
-
-    if (data.email === undefined || data.email.trim() === '') {
-      alert('Campo e-mail é obrigatório.');
-      return;
-    }
-
-    if (
-      !data.email.match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      )
-    ) {
-      alert('Por favor utilize um e-mail válido.');
-      return;
-    }
-
-    if (data.password === undefined || data.password.trim() === '') {
-      alert('Campo senha é obrigatório.');
-      return;
-    }
-
-    if (data.password.length < 6) {
-      alert('Campo senha deve ter no mínimo 6 dígitos.');
-    }
   };
   return (
     <Container>
@@ -56,13 +47,16 @@ const SignUp: React.FC = () => {
         <h1>Cadastro</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input {...register('name')} icon={FiUser} placeholder="Nome" />
+          <p>{errors.name?.message}</p>
           <Input {...register('email')} icon={FiMail} placeholder="E-mail" />
+          <p>{errors.email?.message}</p>
           <Input
             {...register('password')}
             type="password"
             icon={FiLock}
             placeholder="Senha"
           />
+          <p>{errors.password?.message}</p>
           <div>
             <Button type="submit">Entrar</Button>
             <Button type="submit" style={{ backgroundColor: '#4FCDDA' }}>

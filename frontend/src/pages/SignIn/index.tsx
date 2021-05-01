@@ -6,6 +6,8 @@
 // Dependencies import
 import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
 // Assets import
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
@@ -21,6 +23,14 @@ import { useAuth } from '../../hooks/AuthContext';
 // Styles import
 import { Container, Content } from './styles';
 
+// Validation schema
+const schema = Yup.object().shape({
+  email: Yup.string()
+    .required('E-mail obrigatório.')
+    .email('Digite um e-mail válido'),
+  password: Yup.string().required('Senha obrigatória.'),
+});
+
 // Interface definition
 interface SignInFormData {
   email: string;
@@ -28,51 +38,36 @@ interface SignInFormData {
 }
 
 const SignIn: React.FC = () => {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
   const { signIn } = useAuth();
 
   // Function definitions
-  const handleFormSubmit = useCallback(
-    (data: SignInFormData) => {
-      // Validation Form
-      if (data.email === undefined || data.email.trim() === '') {
-        alert('Campo e-mail é obrigatório.');
-        return;
-      }
-
-      if (
-        !data.email.match(
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        )
-      ) {
-        alert('Por favor utilize um e-mail válido.');
-        return;
-      }
-
-      if (data.password === undefined || data.password.trim() === '') {
-        alert('Campo senha é obrigatório.');
-        return;
-      }
-
-      signIn({ email: data.email, password: data.password });
-    },
-    [signIn],
-  );
+  const onSubmit = (data: Record<string, ''>) => {
+    signIn({ email: data.email, password: data.password });
+  };
 
   return (
     <Container>
       <Content>
         <img src={logoImg} alt="Bilinho" />
         <h1>Bilinho</h1>
-        <form onSubmit={handleSubmit(handleFormSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <Input {...register('email')} icon={FiMail} placeholder="E-mail" />
+          <p>{errors.email?.message}</p>
           <Input
             {...register('password')}
             type="password"
             icon={FiLock}
             placeholder="Senha"
           />
+          <p>{errors.password?.message}</p>
           <Button type="submit">Entrar</Button>
         </form>
 
