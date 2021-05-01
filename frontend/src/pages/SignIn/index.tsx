@@ -4,7 +4,7 @@
  */
 
 // Dependencies import
-import React, { useContext, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 
 // Assets import
@@ -16,7 +16,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 
 // Util and context import
-import { AuthContext } from '../../context/AuthContext';
+import { useAuth } from '../../hooks/AuthContext';
 
 // Styles import
 import { Container, Content } from './styles';
@@ -30,7 +30,7 @@ interface SignInFormData {
 const SignIn: React.FC = () => {
   const { register, handleSubmit } = useForm();
 
-  const { signIn } = useContext(AuthContext);
+  const { signIn } = useAuth();
 
   // Function definitions
   const handleFormSubmit = useCallback(

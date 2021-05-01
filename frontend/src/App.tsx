@@ -11,7 +11,7 @@ import SignIn from './pages/SignIn';
 // import SignUp from './pages/SignUp';
 
 // Utils and context imports
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider } from './hooks/AuthContext';
 
 // Styles import
 import GlobalStyle from './styles/global';
