@@ -4,7 +4,7 @@
  */
 
 // Dependencies import
-import React, { InputHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes, useRef } from 'react';
 import { IconBaseProps } from 'react-icons';
 
 // Styles import
@@ -16,11 +16,15 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: React.ComponentType<IconBaseProps>;
 }
 
-const Input: React.FC<InputProps> = ({ icon: Icon, ...rest }) => (
-  <Container>
-    {Icon && <Icon size={14} />}
-    <input {...rest} />
-  </Container>
-);
+const Input: React.FC<InputProps> = ({ icon: Icon, ...rest }) => {
+  const inputRef = useRef(null);
+
+  return (
+    <Container>
+      {Icon && <Icon size={14} />}
+      <input ref={inputRef} {...rest} />
+    </Container>
+  );
+};
 
 export default Input;

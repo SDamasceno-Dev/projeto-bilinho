@@ -5,6 +5,7 @@
 
 // Dependencies import
 import React from 'react';
+import { useForm } from 'react-hook-form';
 
 // Components import
 import { FiUser, FiMail, FiLock } from 'react-icons/fi';
@@ -15,16 +16,20 @@ import Button from '../../components/Button';
 import { Container, Content } from './styles';
 
 const SignUp: React.FC = () => {
+  const { register, handleSubmit } = useForm();
+  const onSubmit = (data: Record<string, unknown>) => {
+    console.log('form data', data);
+  };
   return (
     <Container>
       <Content>
         <h1>Cadastro</h1>
-        <form>
-          <Input name="name" icon={FiUser} placeholder="Nome" />
-          <Input name="email" icon={FiMail} placeholder="E-mail" />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Input {...register('name')} icon={FiUser} placeholder="Nome" />
+          <Input {...register('email')} icon={FiMail} placeholder="E-mail" />
           <Input
+            {...register('password')}
             type="password"
-            name="password"
             icon={FiLock}
             placeholder="Senha"
           />
