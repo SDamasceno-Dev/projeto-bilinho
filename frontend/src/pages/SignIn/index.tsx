@@ -46,7 +46,6 @@ const SignIn: React.FC = () => {
   // Function definitions
   const onSubmit = (data: Record<string, ''>) => {
     signIn({ email: data.email, password: data.password });
-    console.log(errors);
   };
 
   return (

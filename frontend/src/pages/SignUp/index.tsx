@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /**
  * @file: SignUp
  * @info: Component of register an user
@@ -8,12 +9,15 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import {} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 // Components import
 import { FiUser, FiMail, FiLock } from 'react-icons/fi';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
+
+// Utils and services import
+import api from '../../services/api';
 
 // Styles import
 import { Container, Content } from './styles';
@@ -29,6 +33,13 @@ const schema = Yup.object().shape({
     .min(6, 'No mínimo 6 dígitos'),
 });
 
+// Interface definition
+interface SignUpformData {
+  name: string;
+  email: string;
+  password: string;
+}
+
 const SignUp: React.FC = () => {
   const {
     register,
@@ -38,9 +49,25 @@ const SignUp: React.FC = () => {
     resolver: yupResolver(schema),
   });
 
+  const history = useHistory();
+
   // Function definitions
-  const onSubmit = (data: Record<string, ''>) => {
-    console.log(data);
+  const onSubmit = async (data: SignUpformData) => {
+    try {
+      await api.post('/users', data);
+
+      alert('Cadastro feito com sucesso!');
+
+      history.push('/');
+    } catch (err) {
+      alert(
+        'Houve um erro no seu cadastro. Por favor verifique as suas credenciais.',
+      );
+    }
+  };
+
+  const goSignin = () => {
+    history.push('/');
   };
   return (
     <Container>
@@ -60,7 +87,11 @@ const SignUp: React.FC = () => {
           <p>{errors.password?.message}</p>
           <div>
             <Button type="submit">Entrar</Button>
-            <Button type="button" style={{ backgroundColor: '#4FCDDA' }}>
+            <Button
+              type="button"
+              style={{ backgroundColor: '#4FCDDA' }}
+              onClick={goSignin}
+            >
               Voltar
             </Button>
           </div>
