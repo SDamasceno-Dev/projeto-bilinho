@@ -52,7 +52,6 @@ const SignIn: React.FC = () => {
     <Container>
       <Content>
         <img src={logoImg} alt="Bilinho" />
-        <h1>Bilinho</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input {...register('email')} icon={FiMail} placeholder="E-mail" />
           <p>{errors.email?.message}</p>

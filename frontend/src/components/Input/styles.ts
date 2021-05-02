@@ -11,12 +11,13 @@ export const Container = styled.div<ContainerProps>`
   padding: 5px;
   display: flex;
   align-items: center;
+  margin: 5px;
 
   border: 1px solid #999999;
   color: #ccc;
 
-  & + div {
-    margin-top: 8px;
+  & + p {
+    margin-top: -5px;
   }
 
   input {

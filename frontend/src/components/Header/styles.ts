@@ -10,27 +10,39 @@ export const Container = styled.div`
   border-bottom: 0.5px solid #eee;
 `;
 
+export const HeaderLeft = styled.div`
+  height: 80px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+
+  img {
+    height: 100%;
+    margin-right: 10px;
+  }
+`;
+
 export const UserInfoContainer = styled.div`
-  min-width: 30%;
-  height: 75px;
-  margin: 10px;
+  max-width: 30%;
+  height: 80px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  p {
+  div {
     display: flex;
     flex-direction: row;
     margin: 3px;
 
-    h5 {
+    span {
       color: #5f4693;
       font-size: 12px;
     }
 
-    h6 {
+    strong {
       color: #333;
       font-size: 12px;
       margin-left: 5px;
+      font-weight: 500;
     }
   }
 `;
