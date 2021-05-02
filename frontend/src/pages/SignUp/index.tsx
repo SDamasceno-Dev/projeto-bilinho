@@ -8,6 +8,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import {} from 'react-router-dom';
 
 // Components import
 import { FiUser, FiMail, FiLock } from 'react-icons/fi';
@@ -59,7 +60,7 @@ const SignUp: React.FC = () => {
           <p>{errors.password?.message}</p>
           <div>
             <Button type="submit">Entrar</Button>
-            <Button type="submit" style={{ backgroundColor: '#4FCDDA' }}>
+            <Button type="button" style={{ backgroundColor: '#4FCDDA' }}>
               Voltar
             </Button>
           </div>

@@ -5,10 +5,7 @@
 
 // Dependencies import
 import React from 'react';
-
-// Some import
-import SignIn from './pages/SignIn';
-// import SignUp from './pages/SignUp';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 // Utils and context imports
 import { AuthProvider } from './hooks/AuthContext';
@@ -16,14 +13,17 @@ import { AuthProvider } from './hooks/AuthContext';
 // Styles import
 import GlobalStyle from './styles/global';
 
+// Routes import
+import Routes from './routes';
+
 const App: React.FC = () => (
-  <>
+  <Router>
     <AuthProvider>
-      <SignIn />
+      <Routes />
     </AuthProvider>
 
     <GlobalStyle />
-  </>
+  </Router>
 );
 
 export default App;

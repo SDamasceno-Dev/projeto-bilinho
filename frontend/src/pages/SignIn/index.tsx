@@ -4,10 +4,11 @@
  */
 
 // Dependencies import
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import { Link } from 'react-router-dom';
 
 // Assets import
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
@@ -31,12 +32,6 @@ const schema = Yup.object().shape({
   password: Yup.string().required('Senha obrigatória.'),
 });
 
-// Interface definition
-interface SignInFormData {
-  email: string;
-  password: string;
-}
-
 const SignIn: React.FC = () => {
   const {
     register,
@@ -51,6 +46,7 @@ const SignIn: React.FC = () => {
   // Function definitions
   const onSubmit = (data: Record<string, ''>) => {
     signIn({ email: data.email, password: data.password });
+    console.log(errors);
   };
 
   return (
@@ -71,10 +67,10 @@ const SignIn: React.FC = () => {
           <Button type="submit">Entrar</Button>
         </form>
 
-        <a href="Login">
+        <Link to="/signup">
           <FiLogIn />
           Cadastrar aqui
-        </a>
+        </Link>
       </Content>
     </Container>
   );
