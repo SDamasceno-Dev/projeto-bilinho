@@ -28,8 +28,6 @@ import {
 const Header: React.FC = () => {
   const { signOut, user } = useAuth();
 
-  console.log(user);
-
   return (
     <Container>
       <HeaderLeft>
