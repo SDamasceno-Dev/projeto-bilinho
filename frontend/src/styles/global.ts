@@ -8,6 +8,10 @@ export default createGlobalStyle`
     outline: 0;
   }
 
+  html, body {
+    height: 100%;
+  }
+
   body {
     background-color: #fff;
     color: #626262;
