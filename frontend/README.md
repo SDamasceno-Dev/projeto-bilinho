@@ -1,46 +1,96 @@
-# Getting Started with Create React App
+# App Bilinho
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> Este projeto foi desenvolvido com o objetivo de atender a resolução de um desafio técnico para o preenchimento de uma vaga Fullstack.
 
-## Available Scripts
+## Instalação
 
-In the project directory, you can run:
+Vamos executar o preparo do ambiente para o correto funcionamento do Sistema Bilinho
 
-### `yarn start`
+### Instalação do Backend
+1- Para a correta execução do App Bilinho, proceder com a clonagem do repositório do Github;
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+2- Após a clonagem do repositório, acessar a pasta do projeto (projeto-bilinho) e entrar na pasta *Backend*;
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+3- Após acessar a pasta backend, executar no terminal o comando
+```bash
+> yarn
+```
+para instalar todas as dependências do App;
+4- Com a instalação das dependências da pasta Backend agora instalar o banco de dados PostGres. No desenvolvimento desse App foi utilizada a seguinte versão do Postgres junto com o Docker:
+PostgreSQL 13.2 (Debian 13.2-1.pgdg100+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 8.3.0-6) 8.3.0, 64-bit
 
-### `yarn test`
+5- O banco de dados do Bilinho foi criado com a seguinte configuração
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+"type": "postgres",
+"host": "localhost",
+"port": 5432,
+"username": "postgres",
+"password": "docker",
+"database": "bilinho_db",
+```
 
-### `yarn build`
+6- Após o banco de dados instalado, executar o comando no terminal
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+> yarn dev:server
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Isso irá fazer os serviços de backend serem iniciados. Se tudo estiver ocorrido bem até esse momento, a seguinte mensagem será exibida no terminal onde o backend estará sendo executado
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+> 🏁 Server started on port 3333
+```
 
-### `yarn eject`
+7- Com o serviço iniciado, vamos proceder com a instalação das tabelas do App Bilinho no Banco de dados. Para a correta instalação das tabelas, é necessário fazer alguns procedimentos pois devido à um bug reconhecido [aqui](https://github.com/typeorm/typeorm/issues/4588) no TypeOrm, não é possível executar todas as migrations com um único comando, pois ele perder ficam sem referência com as tabelas relacionadas enquanto elas não estão completamente instaladas. Dessa forma é necessário proceder da seguinte forma:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+I. Renomear todos os arquivos (menos o arquivo 1619650073527-CreateEducInsts.ts) na pasta backend/src/database/migrations inserindo um _ no final da extensão .ts, ficando da seguinte maneira:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+1619650073527-CreateEducInsts.ts
+1619650136602-CreateStudents.ts_
+1619650232456-CreateEnrollments.ts_
+1619650266500-CreateInvoices.ts_
+1619650295826-CreateUsers.ts_
+1619788639672-AddAvatarFieldtoUsers.ts_
+```
+II. Após esse procedimento, então teremos somente o arquivo "1619650073527-CreateEducInsts.ts" preparado para a migration, assim executar o seguinte comando
+```bash
+> yarn typeorm migration:run
+```
+Com isso a migration irá ocorrer normalmente.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+III. Ao finalizar a 1ª migration, renomear o próximo aquivo na sequencia "1619650136602-CreateStudents.ts_" deixando dessa maneira "1619650136602-CreateStudents.ts" e executar de novo o comando
+```bash
+> yarn typeorm migration:run
+```
+IV. Proceder da mesma forma, na sequencia dos arquivos listados acima, até que o último arquivo tenha sido migrado;
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+V. Se todo o procedimento tiver sido executado de maneira correta, todas as migrations terão sido realizadas com sucesso e teremos criado no banco de dados "bilinho_db" as seguintes tabelas:
 
-## Learn More
+```bash
+educinsts
+enrollments
+invoices
+migrations
+students
+users
+```
+8- Com isso terminamos o preparo do Backend para a execução do App Bilinho. Vamos agora proceder com a instalação do Frontend.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Instalação do Frontend
+1- Para a instalação do Frontend, basta acessar com o terminal a pasta "frontend" localizada na raiz do projeto Bilinho;
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+2- Após o acesso da pasta, executar o seguinte comando
+```bash
+> yarn
+```
+Com isso todas as dependências do Frontend serão instaladas
+
+3- Após a conclusão da instalação das dependências do Frontend, basta executar o seguinte comando para inicial o App Bilinho
+```bash
+> yarn start
+```
+Com isso, será aberta uma nova aba no seu navegador e será iniciado o App Bilinho
+
+Com todos esse processo executado corretamente, basta agora criar um novo usuário clicando em "Cadastrar aqui", inserir o nome, e-mail e senha, clicar em "Cadastrar" e pronto, já está com o perfil criado para poder acessar o App Bilinho e começar a usar!
