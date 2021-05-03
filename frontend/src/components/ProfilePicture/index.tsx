@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /**
  * @file: Header
  * @info: Header component of the App

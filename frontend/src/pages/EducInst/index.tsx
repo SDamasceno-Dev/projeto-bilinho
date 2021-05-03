@@ -78,7 +78,6 @@ const EducInst: React.FC = () => {
   const getEducInstList = useCallback(async () => {
     try {
       const response = await api.get('/educinsts', { headers: authorization });
-      console.log(response);
 
       if (response.status === 200) {
         setEducInstsList(response.data);
@@ -127,10 +126,6 @@ const EducInst: React.FC = () => {
   useEffect(() => {
     getEducInstList();
   }, []);
-
-  useEffect(() => {
-    console.log('educInstsList', educInstsList);
-  }, [educInstsList]);
 
   return (
     <>

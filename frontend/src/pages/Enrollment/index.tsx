@@ -9,6 +9,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import Modal from 'react-modal';
+import { format, parseJSON } from 'date-fns';
 
 // Assets import
 import { MdAttachMoney, MdDateRange } from 'react-icons/md';
@@ -59,12 +61,20 @@ interface StudentData {
 }
 
 interface EnrollmentData {
+  id: string;
   totalValue: string;
   numberInvoices: string;
   dueDayInvoices: string;
   courseName: string;
   educinst_id: string;
   student_id: string;
+}
+
+interface InvoiceData {
+  invoiceValue: string;
+  dueDate: Date;
+  enrollment_id: string;
+  status: string;
 }
 
 // Validation schema
@@ -81,6 +91,9 @@ const Enrollment: React.FC = () => {
   const [studentsList, setStudentsList] = useState<EducInstData[]>([]);
   const [educInstsList, setEducInstsList] = useState<StudentData[]>([]);
   const [enrollmentsList, setEnrollmentsList] = useState<EnrollmentData[]>([]);
+  const [invoicesList, setInvoicesList] = useState<InvoiceData[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState({});
 
   const { token } = useAuth();
   const authorization = { Authorization: `Bearer ${token}` };
@@ -197,6 +210,23 @@ const Enrollment: React.FC = () => {
     [],
   );
 
+  // Get All enrollment invoices
+  const getEnrollmentInvoices = useCallback(async ({ id }): Promise<void> => {
+    try {
+      const response = await api.get('/invoices', { headers: authorization });
+      if (response.status === 200) {
+        setInvoicesList(
+          response.data.filter(
+            (item: InvoiceData) => id === item.enrollment_id,
+          ),
+        );
+        console.log(response.data);
+      }
+    } catch (err) {
+      console.error(err.response);
+    }
+  }, []);
+
   // Submit form
   const onSubmit = (data: Record<string, ''>) => {
     enrollmentRegister({
@@ -215,9 +245,68 @@ const Enrollment: React.FC = () => {
     getEnrollments();
   }, [getAllEducInsts, getAllStudents, getEnrollments]);
 
+  useEffect(() => {
+    if (Object.keys(modalData).length !== 0) {
+      getEnrollmentInvoices(modalData);
+      setShowModal(true);
+    }
+  }, [modalData, getEnrollmentInvoices]);
+
+  useEffect(() => {
+    if (showModal === false) {
+      setModalData([]);
+    }
+  }, [showModal]);
+
   return (
     <>
       <Container>
+        <Modal isOpen={showModal} onRequestClose={() => setShowModal(false)}>
+          <ListItemsContainer>
+            <ListContentTitle />
+            <ListItemsHeader>
+              <HeaderItem>Nome do Curso</HeaderItem>
+              <HeaderItem>Valor da parcela</HeaderItem>
+              <HeaderItem>Data de vencimento</HeaderItem>
+              <HeaderItem>Status</HeaderItem>
+            </ListItemsHeader>
+            <ListItemsContent>
+              {invoicesList.map((item: InvoiceData, i) => {
+                return (
+                  <ListItem key={i.toString()}>
+                    <ListItemElement>
+                      {
+                        enrollmentsList.find(
+                          ({ id }) => id === item.enrollment_id,
+                        )?.courseName
+                      }
+                    </ListItemElement>
+                    <ListItemElement>{`R$ ${
+                      item.invoiceValue === undefined
+                        ? 0
+                        : parseInt(item.invoiceValue, 10)
+                            .toFixed(2) // always two decimal digits
+                            .replace('.', ',') // replace decimal point character with ,
+                            .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+                    } `}</ListItemElement>
+                    <ListItemElement>
+                      {format(parseJSON(item.dueDate), 'dd/MM/yyyy')}
+                    </ListItemElement>
+                    <ListItemElement>{item.status}</ListItemElement>
+                  </ListItem>
+                );
+              })}
+            </ListItemsContent>
+            <ListItemsFooter />
+          </ListItemsContainer>
+          <Button
+            type="button"
+            onClick={() => setShowModal(false)}
+            style={{ width: '10%', position: 'absolute', bottom: 5, right: 5 }}
+          >
+            Fechar Modal
+          </Button>
+        </Modal>
         <Header />
         <Content>
           <BackButton />
@@ -336,7 +425,10 @@ const Enrollment: React.FC = () => {
               <ListItemsContent>
                 {enrollmentsList.map((item: EnrollmentData, i) => {
                   return (
-                    <ListItem key={i.toString()}>
+                    <ListItem
+                      key={i.toString()}
+                      onClick={() => setModalData(item)}
+                    >
                       <ListItemElement>
                         {
                           studentsList.find(({ id }) => id === item.student_id)
@@ -351,7 +443,14 @@ const Enrollment: React.FC = () => {
                         }
                       </ListItemElement>
                       <ListItemElement>{item.courseName}</ListItemElement>
-                      <ListItemElement>{item.totalValue}</ListItemElement>
+                      <ListItemElement>{`R$ ${
+                        item.totalValue === undefined
+                          ? 0
+                          : parseInt(item.totalValue, 10)
+                              .toFixed(2) // always two decimal digits
+                              .replace('.', ',') // replace decimal point character with ,
+                              .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+                      } `}</ListItemElement>
                       <ListItemElement>{item.numberInvoices}</ListItemElement>
                       <ListItemElement>{item.dueDayInvoices}</ListItemElement>
                     </ListItem>
