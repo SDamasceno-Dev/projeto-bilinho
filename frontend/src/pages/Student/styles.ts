@@ -8,6 +8,7 @@ export const Container = styled.div`
 `;
 
 export const Content = styled.div`
+  position: relative;
   flex: 1;
   display: flex;
   align-items: center;
@@ -136,6 +137,12 @@ export const ListItemElement = styled.div`
   width: 100%;
   max-height: 25px;
   padding-left: 5px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* number of lines to show */
+  -webkit-box-orient: vertical;
 
   & + div {
     border-left: 0.5px solid #aaa;

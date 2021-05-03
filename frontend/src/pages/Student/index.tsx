@@ -8,6 +8,8 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import { parse, format, formatISO, parseJSON } from 'date-fns';
+import { maskBr, validateBr } from 'js-brasil';
 
 // Assets import
 import { BsBuilding } from 'react-icons/bs';
@@ -59,12 +61,12 @@ interface ListData {
 const schema = Yup.object().shape({
   studentName: Yup.string().required('Nome é obrigatório'),
   studentITR: Yup.string().required('CPF obrigatório.'),
-  studentBirthDate: Yup.date().required('Data aniversário obrigatório'),
+  studentBirthDate: Yup.string().required('Data aniversário obrigatório'),
   studentMobile: Yup.string().required('Celular obrigatório'),
 });
 
 const Student: React.FC = () => {
-  const [studentsList, setStudentsList] = useState([]);
+  const [studentsList, setStudentsList] = useState<ListData[]>([]);
   const { token } = useAuth();
   const authorization = { Authorization: `Bearer ${token}` };
 
@@ -83,7 +85,6 @@ const Student: React.FC = () => {
   const getStudentList = useCallback(async () => {
     try {
       const response = await api.get('/students', { headers: authorization });
-      console.log(response);
 
       if (response.status === 200) {
         setStudentsList(response.data);
@@ -96,33 +97,50 @@ const Student: React.FC = () => {
   // Register and Educational Institution
   const studentRegister = useCallback(
     async ({ name, itr, birthDate, mobile, gender, paymentOpt }) => {
-      console.log(name, itr, birthDate, mobile, gender, paymentOpt);
-      // try {
-      //   const response = await api.post(
-      //     '/students',
-      //     {
-      //       name,
-      //       itr,
-      //       birthDate,
-      //       mobile,
-      //       gender,
-      //       paymentOpt,
-      //     },
-      //     { headers: authorization },
-      //   );
-      //   if (response.status === 200) {
-      //     alert('Estudante cadastrada(o) com sucesso!');
-      //   }
-      //   getStudentList();
-      // } catch (err) {
-      //   if (err.response.status === 400) {
-      //     alert(
-      //       `Não foi possível cadastrar a(o) estudante, por favor verifique os dados.\nError: ${err.response.data.message}`,
-      //     );
-      //   }
+      // Validate ITR
+      if (!validateBr.cpf(itr)) {
+        alert('CPF inválido. Por favor inserir um cpf válido.');
+        return;
+      }
 
-      //   console.error(err.response);
-      // }
+      // Validate birthDate
+      if (
+        !birthDate.match(
+          /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/,
+        )
+      ) {
+        alert('Data inválida. Por favor, digite uma data válida.');
+        return;
+      }
+      const bDate = formatISO(parse(birthDate, 'dd/MM/yyyy', new Date()));
+
+      try {
+        const response = await api.post(
+          '/students',
+          {
+            name,
+            itr,
+            birthDate: bDate,
+            mobile,
+            gender,
+            paymentOpt,
+          },
+          { headers: authorization },
+        );
+        if (response.status === 200) {
+          alert('Estudante cadastrada(o) com sucesso!');
+          reset();
+        }
+        getStudentList();
+      } catch (err) {
+        if (err.response.status === 400) {
+          alert(
+            `Não foi possível cadastrar a(o) estudante, por favor verifique os dados.\nError: ${err.response.data.message}`,
+          );
+        }
+
+        console.error(err.response);
+      }
     },
     [],
   );
@@ -152,6 +170,7 @@ const Student: React.FC = () => {
       <Container>
         <Header />
         <Content>
+          <BackButton />
           <TitlePage>
             <h1>Cadastro de Estudante</h1>
           </TitlePage>
@@ -180,10 +199,13 @@ const Student: React.FC = () => {
                   <InputComponent>
                     <span>CPF</span>
                     <Input
-                      {...register('studentITR')}
+                      {...register('studentITR', {
+                        required: true,
+                      })}
                       icon={AiOutlineNumber}
-                      placeholder="CPF"
-                      type="number"
+                      placeholder="Informe o CPF sem os pontos"
+                      type="text"
+                      maxLength={11}
                     />
                     <p>{errors.studentITR?.message}</p>
                   </InputComponent>
@@ -192,8 +214,8 @@ const Student: React.FC = () => {
                     <Input
                       {...register('studentBirthDate')}
                       icon={AiOutlineNumber}
-                      placeholder="Data aniversário"
-                      type="number"
+                      placeholder="Data aniversário dd/mm/aaaa"
+                      maxLength={10}
                     />
                     <p>{errors.studentBirthDate?.message}</p>
                   </InputComponent>
@@ -203,7 +225,7 @@ const Student: React.FC = () => {
                       {...register('studentMobile')}
                       icon={AiOutlineNumber}
                       placeholder="Celular"
-                      type="number"
+                      type="text"
                     />
                     <p>{errors.studentMobile?.message}</p>
                   </InputComponent>
@@ -253,9 +275,13 @@ const Student: React.FC = () => {
                   return (
                     <ListItem key={i.toString()}>
                       <ListItemElement>{item.name}</ListItemElement>
-                      <ListItemElement>{item.itr}</ListItemElement>
-                      <ListItemElement>{item.birthDate}</ListItemElement>
-                      <ListItemElement>{item.mobile}</ListItemElement>
+                      <ListItemElement>{maskBr.cpf(item.itr)}</ListItemElement>
+                      <ListItemElement>
+                        {format(parseJSON(item.birthDate), 'dd/MM/yyyy')}
+                      </ListItemElement>
+                      <ListItemElement>
+                        {maskBr.celular(item.mobile)}
+                      </ListItemElement>
                       <ListItemElement>{item.gender}</ListItemElement>
                       <ListItemElement>{item.paymentOpt}</ListItemElement>
                     </ListItem>
