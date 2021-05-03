@@ -1,4 +1,4 @@
-![Projeto Bilinho](image.jpg)
+![Projeto Bilinho](https://user-images.githubusercontent.com/58818002/116847043-24899900-abc0-11eb-802f-c62f9e6c8a73.png)
 # App Bilinho
 
 > Este projeto foi desenvolvido com o objetivo de atender a resolução de um desafio técnico para o preenchimento de uma vaga Fullstack.
