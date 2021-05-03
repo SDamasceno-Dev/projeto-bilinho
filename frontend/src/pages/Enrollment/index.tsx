@@ -58,6 +58,15 @@ interface StudentData {
   id: string;
 }
 
+interface EnrollmentData {
+  totalValue: string;
+  numberInvoices: string;
+  dueDayInvoices: string;
+  courseName: string;
+  educinst_id: string;
+  student_id: string;
+}
+
 // Validation schema
 const schema = Yup.object().shape({
   eduinst_id: Yup.string().required('Escolha uma instituição.'),
@@ -71,6 +80,7 @@ const schema = Yup.object().shape({
 const Enrollment: React.FC = () => {
   const [studentsList, setStudentsList] = useState<EducInstData[]>([]);
   const [educInstsList, setEducInstsList] = useState<StudentData[]>([]);
+  const [enrollmentsList, setEnrollmentsList] = useState<EnrollmentData[]>([]);
 
   const { token } = useAuth();
   const authorization = { Authorization: `Bearer ${token}` };
@@ -110,6 +120,20 @@ const Enrollment: React.FC = () => {
     }
   }, []);
 
+  // Get all Enrollments
+  const getEnrollments = useCallback(async () => {
+    try {
+      const response = await api.get('/enrollments', {
+        headers: authorization,
+      });
+      if (response.status === 200) {
+        setEnrollmentsList(response.data);
+      }
+    } catch (err) {
+      console.error(err.response);
+    }
+  }, []);
+
   // Create all invoices
   const invoicesCreate = useCallback(
     async ({ enrollmentValue, numberInvoices, dueDay, enrollment_id }) => {
@@ -121,6 +145,7 @@ const Enrollment: React.FC = () => {
         );
         if (response.status === 200) {
           alert('Matrícula realizada com sucesso!');
+          getEnrollments();
         }
       } catch (err) {
         console.error(err.response);
@@ -166,7 +191,6 @@ const Enrollment: React.FC = () => {
             `Não foi possível fazer a matrícula do estudante, por favor verifique os dados.\nError: ${err.response.data.message}`,
           );
         }
-
         console.error(err.response);
       }
     },
@@ -188,7 +212,8 @@ const Enrollment: React.FC = () => {
   useEffect(() => {
     getAllEducInsts();
     getAllStudents();
-  }, []);
+    getEnrollments();
+  }, [getAllEducInsts, getAllStudents, getEnrollments]);
 
   return (
     <>
@@ -298,7 +323,43 @@ const Enrollment: React.FC = () => {
                 </ButtonsContainer>
               </form>
             </RegisterFieldsContainer>
-            <ListItemsContainer />
+            <ListItemsContainer>
+              <ListContentTitle />
+              <ListItemsHeader>
+                <HeaderItem>Nome Estudante</HeaderItem>
+                <HeaderItem>Instituição de Ensino</HeaderItem>
+                <HeaderItem>Curso</HeaderItem>
+                <HeaderItem>Valor Total</HeaderItem>
+                <HeaderItem>Parcelas</HeaderItem>
+                <HeaderItem>Dia vencimento</HeaderItem>
+              </ListItemsHeader>
+              <ListItemsContent>
+                {enrollmentsList.map((item: EnrollmentData, i) => {
+                  return (
+                    <ListItem key={i.toString()}>
+                      <ListItemElement>
+                        {
+                          studentsList.find(({ id }) => id === item.student_id)
+                            ?.name
+                        }
+                      </ListItemElement>
+                      <ListItemElement>
+                        {
+                          educInstsList.find(
+                            ({ id }) => id === item.educinst_id,
+                          )?.name
+                        }
+                      </ListItemElement>
+                      <ListItemElement>{item.courseName}</ListItemElement>
+                      <ListItemElement>{item.totalValue}</ListItemElement>
+                      <ListItemElement>{item.numberInvoices}</ListItemElement>
+                      <ListItemElement>{item.dueDayInvoices}</ListItemElement>
+                    </ListItem>
+                  );
+                })}
+              </ListItemsContent>
+              <ListItemsFooter />
+            </ListItemsContainer>
           </RegisterContainer>
         </Content>
       </Container>
