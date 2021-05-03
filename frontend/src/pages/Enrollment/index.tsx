@@ -281,14 +281,15 @@ const Enrollment: React.FC = () => {
                         )?.courseName
                       }
                     </ListItemElement>
-                    <ListItemElement>{`R$ ${
-                      item.invoiceValue === undefined
-                        ? 0
-                        : parseInt(item.invoiceValue, 10)
-                            .toFixed(2) // always two decimal digits
-                            .replace('.', ',') // replace decimal point character with ,
-                            .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
-                    } `}</ListItemElement>
+                    <ListItemElement>
+                      {`R$ ${
+                        item.invoiceValue === undefined
+                          ? 0
+                          : item.invoiceValue
+                              .replace('.', ',') // replace decimal point character with ,
+                              .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+                      } `}
+                    </ListItemElement>
                     <ListItemElement>
                       {format(parseJSON(item.dueDate), 'dd/MM/yyyy')}
                     </ListItemElement>

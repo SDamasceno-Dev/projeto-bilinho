@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { shade } from 'polished';
 
 export const Container = styled.div`
   position: relative;
@@ -65,4 +66,13 @@ export const AppExit = styled.button`
   align-items: center;
   border: 0;
   background-color: transparent;
+
+  svg {
+    color: #5f4693;
+    transition: color 0.3s;
+
+    &:hover {
+      color: ${shade(0.5, '#5f4693')};
+    }
+  }
 `;

@@ -46,8 +46,8 @@ const Header: React.FC = () => {
       <ProfileManagementContainer>
         <ProfilePicture />
         <AppExit onClick={signOut}>
-          <FaPowerOff size={20} color="#333" />
-          <h5>Turn Off</h5>
+          <FaPowerOff size={20} />
+          <h5>LogOff</h5>
         </AppExit>
       </ProfileManagementContainer>
     </Container>
