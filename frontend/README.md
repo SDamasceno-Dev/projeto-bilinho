@@ -1,3 +1,4 @@
+![Projeto Bilinho](image.jpg)
 # App Bilinho
 
 > Este projeto foi desenvolvido com o objetivo de atender a resolução de um desafio técnico para o preenchimento de uma vaga Fullstack.
