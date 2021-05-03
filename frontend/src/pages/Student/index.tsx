@@ -159,11 +159,7 @@ const Student: React.FC = () => {
 
   useEffect(() => {
     getStudentList();
-  }, []);
-
-  useEffect(() => {
-    console.log('studentsList', studentsList);
-  }, [studentsList]);
+  }, [getStudentList]);
 
   return (
     <>

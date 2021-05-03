@@ -88,31 +88,34 @@ const EducInst: React.FC = () => {
   }, []);
 
   // Register and Educational Institution
-  const educInstRegister = useCallback(async ({ name, ein, type }) => {
-    try {
-      const response = await api.post(
-        '/educinsts',
-        {
-          name,
-          ein,
-          type,
-        },
-        { headers: authorization },
-      );
-      if (response.status === 200) {
-        alert('Instituição cadastrada com sucesso!');
-      }
-      getEducInstList();
-    } catch (err) {
-      if (err.response.status === 400) {
-        alert(
-          `Não foi possível cadastrar a instituição, por favor verifique os dados.\nError: ${err.response.data.message}`,
+  const educInstRegister = useCallback(
+    async ({ name, ein, type }) => {
+      try {
+        const response = await api.post(
+          '/educinsts',
+          {
+            name,
+            ein,
+            type,
+          },
+          { headers: authorization },
         );
-      }
+        if (response.status === 200) {
+          alert('Instituição cadastrada com sucesso!');
+        }
+        getEducInstList();
+      } catch (err) {
+        if (err.response.status === 400) {
+          alert(
+            `Não foi possível cadastrar a instituição, por favor verifique os dados.\nError: ${err.response.data.message}`,
+          );
+        }
 
-      console.error(err.response);
-    }
-  }, []);
+        console.error(err.response);
+      }
+    },
+    [getEducInstList],
+  );
 
   // Submit form
   const onSubmit = (data: Record<string, ''>) => {
@@ -125,7 +128,7 @@ const EducInst: React.FC = () => {
 
   useEffect(() => {
     getEducInstList();
-  }, []);
+  }, [getEducInstList]);
 
   return (
     <>

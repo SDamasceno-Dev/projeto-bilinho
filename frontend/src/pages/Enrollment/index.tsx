@@ -220,7 +220,6 @@ const Enrollment: React.FC = () => {
             (item: InvoiceData) => id === item.enrollment_id,
           ),
         );
-        console.log(response.data);
       }
     } catch (err) {
       console.error(err.response);
@@ -305,7 +304,7 @@ const Enrollment: React.FC = () => {
             onClick={() => setShowModal(false)}
             style={{ width: '10%', position: 'absolute', bottom: 5, right: 5 }}
           >
-            Fechar Modal
+            Fechar
           </Button>
         </Modal>
         <Header />

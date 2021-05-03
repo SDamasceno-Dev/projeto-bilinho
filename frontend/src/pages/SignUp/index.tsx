@@ -86,7 +86,7 @@ const SignUp: React.FC = () => {
           />
           <p>{errors.password?.message}</p>
           <div>
-            <Button type="submit">Entrar</Button>
+            <Button type="submit">Cadastrar</Button>
             <Button
               type="button"
               style={{ backgroundColor: '#4FCDDA' }}
