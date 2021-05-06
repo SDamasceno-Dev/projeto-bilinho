@@ -9,10 +9,7 @@
 
 // Dependencies imports
 import { getCustomRepository } from 'typeorm';
-import { parseISO, isAfter, getYear, getMonth, add } from 'date-fns';
-
-// Errors imports
-import AppError from '../errors/AppError';
+import { isAfter, getYear, getMonth, add, isWeekend, getDay } from 'date-fns';
 
 // Importing Models & Repositories
 import Invoice from '../models/Invoice';
@@ -37,13 +34,10 @@ class CreateInvoiceService {
     // Defines invoice value
     const invoiceValue = (enrollmentValue / numberInvoices).toFixed(2);
 
-    // Formating date
-    const dateBase = parseISO(
-      `${getYear(new Date())}-${
-        getMonth(new Date()) + 1 < 9
-          ? `0${getMonth(new Date()) + 1}`
-          : getMonth(new Date()) + 1
-      }-${dueDay}`,
+    const dateBase = new Date(
+      getYear(new Date()),
+      getMonth(new Date()),
+      dueDay,
     );
 
     // Verify the date
@@ -60,6 +54,16 @@ class CreateInvoiceService {
     // Create all invoices
     for (let i = 0; i < numberInvoices; i += 1) {
       dueDate = add(dueDateTemp, { months: i });
+      const isWeekendDay = isWeekend(dueDate);
+
+      // Set DueDay to the next business day
+      if (isWeekendDay) {
+        if (getDay(dueDate) === 6) {
+          dueDate = add(dueDate, { days: 2 });
+        } else {
+          dueDate = add(dueDate, { days: 1 });
+        }
+      }
 
       const invoice = invoiceRepository.create({
         invoiceValue,
@@ -68,9 +72,8 @@ class CreateInvoiceService {
         status,
       });
       await invoiceRepository.save(invoice);
+      return invoice;
     }
-
-    return invoice;
   }
 }
 
